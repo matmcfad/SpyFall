@@ -21,14 +21,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/DannyOppenheimer/SpyFall.git"
+		"url": "git+https://github.com/matmcfad/SpyFall.git"
 	},
 	"author": "Danny O.",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/DannyOppenheimer/SpyFall/issues"
+		"url": "https://github.com/matmcfad/SpyFall/issues"
 	},
-	"homepage": "https://spyfall.groups.id",
+	"homepage": "https://spyfall.matmcfad.com",
 	"keywords": [
 		"spyfall"
 	]
