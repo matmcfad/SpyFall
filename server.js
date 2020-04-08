@@ -1,19 +1,15 @@
 const express = require('express');
-//const app = express();
-//const https = require('https');
-//const http = require('http');
-const socket = require('socket.io');
-const fs = require('fs');
+const app = express();
+const http = require('http');
+
 const helmet = require('helmet');
 const serve_static = require('serve-static');
 const compression = require('compression');
-
-var app = express();
-var io = socket();
-app.io = io;
-
 app.use(helmet());
 app.use(compression());
+
+const socket = require('socket.io');
+const fs = require('fs');
 
 var rooms = {};
 
@@ -22,18 +18,18 @@ const json2 = JSON.parse(fs.readFileSync('./Storage/spyfall_2.json', 'utf8'));
 const json3 = JSON.parse(fs.readFileSync('./Storage/custom_1.json', 'utf-8'));
 const users_json = JSON.parse(fs.readFileSync('./Storage/users.json', 'utf-8'));
 
-/**
+const port = normalizePort(process.env.PORT || '3000');
+
 const http_config = http.createServer(
 	{
 	},
 	app
 );
-const server = http_config.listen(80, () => {
-	console.log('spyfall.groups.id is listening on port 80!');
+const server = http_config.listen(port, () => {
+	console.log('spyfall.groups.id is listening on port '+ port);
 });
 
 const io = socket(server, { cookie: false });
-**/
 
 // feeding our app the folder containing all of our frontend pages
 app.use(
@@ -43,15 +39,6 @@ app.use(
 		index: ['index.html']
 	})
 );
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-	var err = new Error("Not Found");
-	err.status = 404;
-	next(err);
-});
-
-
 
 io.on('connection', socket => {
 	console.log(
@@ -316,14 +303,3 @@ async function logUser(user_system) {
 		if (err) console.error(err);
 	});
 }
-
-// production error handler
-// error handler
-app.use(function(err, req, res, next) {
-	res.status(err.status || 500);
-	res.render("error", {
-		message: err.message,
-		error: err
-	});
-	next();
-});
