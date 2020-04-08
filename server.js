@@ -2,7 +2,6 @@ const express = require('express');
 //const app = express();
 //const https = require('https');
 //const http = require('http');
-var cookieParser = require("cookie-parser");
 const socket = require('socket.io');
 const fs = require('fs');
 const helmet = require('helmet');
@@ -32,10 +31,10 @@ const http_config = http.createServer(
 const server = http_config.listen(80, () => {
 	console.log('spyfall.groups.id is listening on port 80!');
 });
+
+const io = socket(server, { cookie: false });
 **/
 
-//const io = socket(server, { cookie: false });
-app.use(cookieParser());
 // feeding our app the folder containing all of our frontend pages
 app.use(
 	serve_static('frontend', {
