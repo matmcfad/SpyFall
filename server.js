@@ -31,7 +31,7 @@ const server = https_key_config.listen(443, () => {
 	console.log('spyfall.groups.id is listening on port 443!');
 });
 **/
-const http_config = http.https.createServer(
+const http_config = http.createServer(
 	{
 	},
 	app
