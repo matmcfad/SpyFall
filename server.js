@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
-const https = require('https');
+//const https = require('https');
+const http = require('http');
 
 const helmet = require('helmet');
 const serve_static = require('serve-static');
@@ -18,7 +19,7 @@ const json2 = JSON.parse(fs.readFileSync('./Storage/spyfall_2.json', 'utf8'));
 const json3 = JSON.parse(fs.readFileSync('./Storage/custom_1.json', 'utf-8'));
 const users_json = JSON.parse(fs.readFileSync('./Storage/users.json', 'utf-8'));
 
-const https_key_config = https.createServer(
+/**const https_key_config = https.createServer(
 	{
 		key: fs.readFileSync('/etc/letsencrypt/live/spyfall.groups.id/privkey.pem'),
 		cert: fs.readFileSync('/etc/letsencrypt/live/spyfall.groups.id/fullchain.pem')
@@ -28,6 +29,15 @@ const https_key_config = https.createServer(
 
 const server = https_key_config.listen(443, () => {
 	console.log('spyfall.groups.id is listening on port 443!');
+});
+**/
+const http_config = http.https.createServer(
+	{
+	},
+	app
+);
+const server = http_config.listen(80, () => {
+	console.log('spyfall.groups.id is listening on port 80!');
 });
 
 // feeding our app the folder containing all of our frontend pages
