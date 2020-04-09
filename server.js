@@ -1,15 +1,14 @@
 const express = require('express');
-const app = express();
+const socket = require('socket.io');
 const http = require('http');
-
 const helmet = require('helmet');
 const serve_static = require('serve-static');
 const compression = require('compression');
+const fs = require('fs');
+
+const app = express();
 app.use(helmet());
 app.use(compression());
-
-const socket = require('socket.io');
-const fs = require('fs');
 
 var rooms = {};
 
@@ -19,17 +18,20 @@ const json3 = JSON.parse(fs.readFileSync('./Storage/custom_1.json', 'utf-8'));
 const users_json = JSON.parse(fs.readFileSync('./Storage/users.json', 'utf-8'));
 
 const port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
 
-const http_config = http.createServer(
-	{
-	},
-	app
-);
-const server = http_config.listen(port, () => {
-	console.log('spyfall.groups.id is listening on port '+ port);
+var server = http.createServer(app);
+const io = socket(server, { cookie: false });
+
+io.attach(server, {
+	pingInterval: 15000,
+	pingTimeout: 30000
 });
 
-const io = socket(server, { cookie: false });
+server.listen(port);
+console.log('spyfall is now running on port ' + port + '. Press Ctrl+C to stop.');
+server.on('error', onError);
+server.on('listening', onListening);
 
 // feeding our app the folder containing all of our frontend pages
 app.use(
@@ -302,4 +304,64 @@ async function logUser(user_system) {
 	fs.writeFile('Storage/users.json', JSON.stringify(users_json, null, 4), err => {
 		if (err) console.error(err);
 	});
+}
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+	var port = parseInt(val, 10);
+
+	if (isNaN(port)) {
+		// named pipe
+		return val;
+	}
+
+	if (port >= 0) {
+		// port number
+		return port;
+	}
+
+	return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+	if (error.syscall !== 'listen') {
+		throw error;
+	}
+
+	var bind = typeof port === 'string' ?
+		'Pipe ' + port :
+		'Port ' + port;
+
+	// handle specific listen errors with friendly messages
+	switch (error.code) {
+	case 'EACCES':
+		console.error(bind + ' requires elevated privileges');
+		process.exit(1);
+		break;
+	case 'EADDRINUSE':
+		console.error(bind + ' is already in use');
+		process.exit(1);
+		break;
+	default:
+		throw error;
+	}
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+	var addr = server.address();
+	var bind = typeof addr === 'string' ?
+		'pipe ' + addr :
+		'port ' + addr.port;
+	debug('Listening on ' + bind);
 }
