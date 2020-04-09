@@ -1,6 +1,7 @@
 (() => {
 	// Connect to the backend server
-	var socket_link = io.connect('http://spyfall.azurewebsites.net/');
+	var socket_link = io.connect('https://spyfall.azurewebsites.net/');
+	//var socket_link = io.connect('http://localhost:3000/');
 
 	var name = location.search.substring(1);
 

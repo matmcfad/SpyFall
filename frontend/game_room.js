@@ -1,5 +1,6 @@
 (() => {
-	var socket_link = io.connect('http://spyfall.azurewebsites.net/');
+	var socket_link = io.connect('https://spyfall.azurewebsites.net/');
+	//ar socket_link = io.connect('http://localhost:3000/');
 
 	var room_key = location.search.substring(1).split('&')[0];
 	var name = location.search.substring(1).split('&')[1];
