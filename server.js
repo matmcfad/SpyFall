@@ -18,18 +18,11 @@ const json3 = JSON.parse(fs.readFileSync('./Storage/custom_1.json', 'utf-8'));
 const users_json = JSON.parse(fs.readFileSync('./Storage/users.json', 'utf-8'));
 
 const port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+//app.set('port', port);
 
-var server = http.createServer(app);
-const io = socket(server, { cookie: false });
-
-io.attach(server, {
-	pingInterval: 15000,
-	pingTimeout: 30000
+const server = http.createServer(app).listen(port, () => {
+	console.log('spyfall is now running on port ' + port + '. Press Ctrl+C to stop.');
 });
-
-server.listen(port);
-console.log('spyfall is now running on port ' + port + '. Press Ctrl+C to stop.');
 server.on('error', onError);
 server.on('listening', onListening);
 
@@ -41,6 +34,9 @@ app.use(
 		index: ['index.html']
 	})
 );
+
+const io = socket(server, { cookie: false });
+app.io = io;
 
 io.on('connection', socket => {
 	console.log(

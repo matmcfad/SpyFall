@@ -1,5 +1,5 @@
 (() => {
-	var socket_link = io.connect('http://localhost:80/');
+	var socket_link = io.connect('http://spyfall.azurewebsites.net/');
 
 	var name = location.search.substring(1);
 
@@ -24,4 +24,20 @@
 	socket_link.on('no_key_error', data => {
 		document.getElementById('no_key_err').innerHTML = '<br>The room "' + data + '" does not exist!';
 	});
+
+	function normalizePort(val) {
+		var port = parseInt(val, 10);
+	
+		if (isNaN(port)) {
+			// named pipe
+			return val;
+		}
+	
+		if (port >= 0) {
+			// port number
+			return port;
+		}
+	
+		return false;
+	}
 })();

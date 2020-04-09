@@ -1,6 +1,6 @@
 (() => {
 	// Connect to the backend server
-	var socket_link = io.connect('http://localhost:80/');
+	var socket_link = io.connect('http://spyfall.azurewebsites.net/');
 
 	var name = location.search.substring(1);
 
@@ -81,5 +81,21 @@
 		let list = document.getElementById('list');
 		let time_num = parseInt(list.options[list.selectedIndex].value);
 		return time_num;
+	}
+
+	function normalizePort(val) {
+		var port = parseInt(val, 10);
+	
+		if (isNaN(port)) {
+			// named pipe
+			return val;
+		}
+	
+		if (port >= 0) {
+			// port number
+			return port;
+		}
+	
+		return false;
 	}
 })();

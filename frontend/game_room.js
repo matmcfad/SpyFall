@@ -1,5 +1,5 @@
 (() => {
-	var socket_link = io.connect('http://localhost:80/');
+	var socket_link = io.connect('http://spyfall.azurewebsites.net/');
 
 	var room_key = location.search.substring(1).split('&')[0];
 	var name = location.search.substring(1).split('&')[1];
@@ -169,4 +169,20 @@
 		time_cell.innerHTML = (min = min < 10 ? '0' + min : min) + ':' + (sec = sec < 10 ? '0' + sec : sec);
 		countDown--;
 	});
+
+	function normalizePort(val) {
+		var port = parseInt(val, 10);
+	
+		if (isNaN(port)) {
+			// named pipe
+			return val;
+		}
+	
+		if (port >= 0) {
+			// port number
+			return port;
+		}
+	
+		return false;
+	}
 })();
